@@ -4,6 +4,44 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
+    // Admin joins a game room
+    socket.on('admin_join', async (data) => {
+      const { gameCode } = data;
+      socket.join(gameCode);
+      
+      try {
+        const session = await GameSession.findOne({ gameCode }).populate('questions');
+        if (session) {
+          socket.emit('admin_sync', {
+            teams: session.teams,
+            currentQuestionIndex: session.currentQuestionIndex,
+            activeQuestion: (session.currentQuestionIndex > -1 && session.questions[session.currentQuestionIndex]) ? {
+              question: session.questions[session.currentQuestionIndex].question,
+              category: session.questions[session.currentQuestionIndex].category,
+              choices: [session.questions[session.currentQuestionIndex].correctAnswer, ...session.questions[session.currentQuestionIndex].incorrectAnswers].sort(() => Math.random() - 0.5)
+            } : null
+          });
+        }
+      } catch (err) {
+        console.error('Admin sync error:', err);
+      }
+    });
+
+    // Admin ends game
+    socket.on('end_game', async (data) => {
+      const { gameCode } = data;
+      try {
+        const session = await GameSession.findOne({ gameCode });
+        if (session) {
+          session.status = 'completed';
+          await session.save();
+          io.to(gameCode).emit('game_ended', { message: 'The game has been ended by the host. Thank you for playing!' });
+        }
+      } catch (err) {
+        console.error('End game error:', err);
+      }
+    });
+
     // Patron joins a game
     socket.on('patron_join', async (data) => {
       try {

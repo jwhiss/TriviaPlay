@@ -38,12 +38,20 @@ function App() {
       setGameState('WAITING')
     })
 
+    socket.on('game_ended', (data) => {
+      setGameState('JOIN')
+      setTeamInfo(null)
+      setCurrentQuestion(null)
+      setErrorMsg(data.message || 'The host ended the game.')
+    })
+
     return () => {
       socket.off('join_confirmation')
       socket.off('join_error')
       socket.off('question_broadcast')
       socket.off('answer_acknowledgement')
       socket.off('scoreboard_broadcast')
+      socket.off('game_ended')
     }
   }, [])
 

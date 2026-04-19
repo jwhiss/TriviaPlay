@@ -13,10 +13,18 @@ export default function ActiveGame() {
   useEffect(() => {
     const socket = connectSocket()
 
-    // Technically the host doesn't strictly 'patron_join', but we can listen
-    // A robust app would emit an 'admin_join' with JWT to secure the socket.
-    // For now, we'll just listen to the broadcasts for this gameCode.
-    
+    // Emit admin join to get placed in the gameCode room and receive sync payload
+    socket.emit('admin_join', { gameCode })
+
+    // Hydrate state from server upon initial join
+    socket.on('admin_sync', (data) => {
+      if (data) {
+        if (data.teams) setTeams(data.teams)
+        if (data.currentQuestionIndex !== undefined) setQuestionIndex(data.currentQuestionIndex)
+        if (data.activeQuestion) setActiveQuestion(data.activeQuestion)
+      }
+    })
+
     // Listen for scoreboard updates
     socket.on('scoreboard_broadcast', (data) => {
       if (data && data.teams) setTeams(data.teams)
@@ -34,6 +42,7 @@ export default function ActiveGame() {
     return () => {
       // Don't disconnect immediately if we want persistent sockets, 
       // but usually clean up listeners here.
+      socket.off('admin_sync')
       socket.off('scoreboard_broadcast')
       socket.off('score_update')
       socket.off('question_broadcast')
@@ -52,7 +61,10 @@ export default function ActiveGame() {
 
   const handleEndGame = () => {
     if (window.confirm('Are you sure you want to end this game session?')) {
-      // Emitting stop game logic here in future
+      const socket = getSocket()
+      if (socket) {
+        socket.emit('end_game', { gameCode })
+      }
       navigate('/')
     }
   }
