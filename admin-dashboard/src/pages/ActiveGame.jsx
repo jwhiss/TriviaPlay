@@ -9,6 +9,7 @@ export default function ActiveGame() {
   const [teams, setTeams] = useState([])
   const [questionIndex, setQuestionIndex] = useState(-1)
   const [activeQuestion, setActiveQuestion] = useState(null)
+  const [isConfirmingStop, setIsConfirmingStop] = useState(false)
   
   useEffect(() => {
     const socket = connectSocket()
@@ -60,13 +61,11 @@ export default function ActiveGame() {
   }
 
   const handleEndGame = () => {
-    if (window.confirm('Are you sure you want to end this game session?')) {
-      const socket = getSocket()
-      if (socket) {
-        socket.emit('end_game', { gameCode })
-      }
-      navigate('/')
+    const socket = getSocket()
+    if (socket) {
+      socket.emit('end_game', { gameCode })
     }
+    navigate('/')
   }
 
   return (
@@ -82,9 +81,15 @@ export default function ActiveGame() {
           <button onClick={handleNextQuestion} className="btn" style={{ width: 'auto' }}>
             {questionIndex === -1 ? 'START GAME' : 'NEXT QUESTION'}
           </button>
-          <button onClick={handleEndGame} className="btn btn-danger" style={{ width: 'auto' }}>
-            STOP
-          </button>
+          {isConfirmingStop ? (
+            <button onClick={handleEndGame} className="btn btn-danger" style={{ width: 'auto', animation: 'fadeIn 0.2s ease-in' }}>
+              AGREE & STOP
+            </button>
+          ) : (
+            <button onClick={() => setIsConfirmingStop(true)} className="btn btn-danger" style={{ width: 'auto', opacity: 0.9 }}>
+              STOP
+            </button>
+          )}
         </div>
       </div>
 

@@ -34,8 +34,7 @@ function App() {
     })
 
     socket.on('scoreboard_broadcast', () => {
-      // Just waiting between rounds
-      setGameState('WAITING')
+      // Background scoreboard updates shouldn't pull players out of PLAYING or SUBMITTED states.
     })
 
     socket.on('game_ended', (data) => {

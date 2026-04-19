@@ -33,7 +33,7 @@ module.exports = (io) => {
       try {
         const session = await GameSession.findOne({ gameCode });
         if (session) {
-          session.status = 'completed';
+          session.status = 'finished';
           await session.save();
           io.to(gameCode).emit('game_ended', { message: 'The game has been ended by the host. Thank you for playing!' });
         }
