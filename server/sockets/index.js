@@ -85,6 +85,7 @@ module.exports = (io) => {
 
         session.currentQuestionIndex = questionIndex;
         session.status = 'active';
+        session.questionStartTime = new Date();
         await session.save();
 
         const questionInfo = session.questions[questionIndex];
@@ -116,7 +117,18 @@ module.exports = (io) => {
           // Find team and increment score
           const team = session.teams.find(t => t.teamId === teamId);
           if (team) {
-            team.score += 10; // example score increment
+            let pointsAwarded = 10;
+            if (session.questionStartTime) {
+              const timeLimitMillis = (session.questionResponseTimeLimit || 30) * 1000;
+              const timeTakenMs = Date.now() - session.questionStartTime.getTime();
+              
+              if (timeTakenMs < timeLimitMillis) {
+                // Award up to 10 bonus points based on how fast they answered
+                const speedBonus = 10 * (1 - (timeTakenMs / timeLimitMillis));
+                pointsAwarded += Math.max(0, Math.round(speedBonus));
+              }
+            }
+            team.score += pointsAwarded;
             await session.save();
             
             // Score update back to admin (Requirement 4302) and display client (Requirement 3005)

@@ -6,7 +6,7 @@ export default function GameConfig() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  
+
   const [formData, setFormData] = useState({
     name: 'Trivia Night Special',
     questionResponseTimeLimit: 30,
@@ -47,17 +47,17 @@ export default function GameConfig() {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Display Name</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             name="name"
-            value={formData.name} 
+            value={formData.name}
             onChange={handleChange}
-            required 
+            required
           />
         </div>
 
         <div className="form-group">
-          <label>Response Time Limit (seconds)</label>
+          <label>Time Limit for Speed Bonus (seconds)</label>
           <select name="questionResponseTimeLimit" value={formData.questionResponseTimeLimit} onChange={handleChange}>
             <option value="15">15 Seconds</option>
             <option value="30">30 Seconds</option>
@@ -68,14 +68,14 @@ export default function GameConfig() {
 
         <div className="form-group">
           <label>Max Teams Allowed</label>
-          <input 
-            type="number" 
+          <input
+            type="number"
             name="maxTeams"
-            value={formData.maxTeams} 
+            value={formData.maxTeams}
             onChange={handleChange}
             min="1"
             max="200"
-            required 
+            required
           />
         </div>
 

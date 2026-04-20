@@ -35,6 +35,9 @@ const gameSessionSchema = new mongoose.Schema({
     type: Number,
     default: -1
   },
+  questionStartTime: {
+    type: Date
+  },
   questionResponseTimeLimit: {
     type: Number,
     default: 30 // seconds
