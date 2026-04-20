@@ -15,6 +15,7 @@ module.exports = (io) => {
           socket.emit('admin_sync', {
             teams: session.teams,
             currentQuestionIndex: session.currentQuestionIndex,
+            totalQuestions: session.questions.length,
             activeQuestion: (session.currentQuestionIndex > -1 && session.questions[session.currentQuestionIndex]) ? {
               question: session.questions[session.currentQuestionIndex].question,
               category: session.questions[session.currentQuestionIndex].category,
@@ -35,7 +36,7 @@ module.exports = (io) => {
         if (session) {
           session.status = 'finished';
           await session.save();
-          io.to(gameCode).emit('game_ended', { message: 'The game has been ended by the host. Thank you for playing!' });
+          io.to(gameCode).emit('game_ended', { message: 'The game has been ended by the host. Thank you for playing!', teams: session.teams });
         }
       } catch (err) {
         console.error('End game error:', err);

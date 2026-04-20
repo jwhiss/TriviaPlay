@@ -4,12 +4,14 @@ import './App.css'
 import JoinScreen from './components/JoinScreen'
 import WaitingScreen from './components/WaitingScreen'
 import QuestionScreen from './components/QuestionScreen'
+import LeaderboardScreen from './components/LeaderboardScreen'
 
 function App() {
-  const [gameState, setGameState] = useState('JOIN') // JOIN, WAITING, PLAYING, SUBMITTED_PENDING, SUBMITTED
+  const [gameState, setGameState] = useState('JOIN') // JOIN, WAITING, PLAYING, SUBMITTED_PENDING, SUBMITTED, LEADERBOARD
   const [teamInfo, setTeamInfo] = useState(null)
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
+  const [finalTeams, setFinalTeams] = useState([])
 
   useEffect(() => {
     socket.connect()
@@ -38,8 +40,8 @@ function App() {
     })
 
     socket.on('game_ended', (data) => {
-      setGameState('JOIN')
-      setTeamInfo(null)
+      setGameState('LEADERBOARD')
+      setFinalTeams(data.teams || [])
       setCurrentQuestion(null)
       setErrorMsg(data.message || 'The host ended the game.')
     })
@@ -77,6 +79,7 @@ function App() {
       {gameState === 'PLAYING' && <QuestionScreen question={currentQuestion} onAnswer={handleAnswer} />}
       {gameState === 'SUBMITTED_PENDING' && <WaitingScreen message="Submitting answer..." />}
       {gameState === 'SUBMITTED' && <WaitingScreen message="Answer received! Waiting for next question..." />}
+      {gameState === 'LEADERBOARD' && <LeaderboardScreen teams={finalTeams} message={errorMsg} />}
     </div>
   )
 }

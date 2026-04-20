@@ -8,6 +8,7 @@ export default function ActiveGame() {
   
   const [teams, setTeams] = useState([])
   const [questionIndex, setQuestionIndex] = useState(-1)
+  const [totalQuestions, setTotalQuestions] = useState(0)
   const [activeQuestion, setActiveQuestion] = useState(null)
   const [isConfirmingStop, setIsConfirmingStop] = useState(false)
   
@@ -22,6 +23,7 @@ export default function ActiveGame() {
       if (data) {
         if (data.teams) setTeams(data.teams)
         if (data.currentQuestionIndex !== undefined) setQuestionIndex(data.currentQuestionIndex)
+        if (data.totalQuestions !== undefined) setTotalQuestions(data.totalQuestions)
         if (data.activeQuestion) setActiveQuestion(data.activeQuestion)
       }
     })
@@ -78,17 +80,25 @@ export default function ActiveGame() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={handleNextQuestion} className="btn" style={{ width: 'auto' }}>
-            {questionIndex === -1 ? 'START GAME' : 'NEXT QUESTION'}
-          </button>
-          {isConfirmingStop ? (
-            <button onClick={handleEndGame} className="btn btn-danger" style={{ width: 'auto', animation: 'fadeIn 0.2s ease-in' }}>
-              AGREE & STOP
+          {totalQuestions > 0 && questionIndex >= totalQuestions - 1 ? (
+            <button onClick={handleEndGame} className="btn" style={{ width: 'auto', background: 'var(--accent-color)', color: 'white' }}>
+              FINISH GAME
             </button>
           ) : (
-            <button onClick={() => setIsConfirmingStop(true)} className="btn btn-danger" style={{ width: 'auto', opacity: 0.9 }}>
-              STOP
-            </button>
+            <>
+              <button onClick={handleNextQuestion} className="btn" style={{ width: 'auto' }}>
+                {questionIndex === -1 ? 'START GAME' : 'NEXT QUESTION'}
+              </button>
+              {isConfirmingStop ? (
+                <button onClick={handleEndGame} className="btn btn-danger" style={{ width: 'auto', animation: 'fadeIn 0.2s ease-in' }}>
+                  AGREE & STOP
+                </button>
+              ) : (
+                <button onClick={() => setIsConfirmingStop(true)} className="btn btn-danger" style={{ width: 'auto', opacity: 0.9 }}>
+                  STOP
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -97,7 +107,9 @@ export default function ActiveGame() {
         {/* Active Question Panel */}
         <div className="glass-card" style={{ maxWidth: '100%' }}>
           <h3 style={{ marginTop: 0 }}>Current Question</h3>
-          {activeQuestion ? (
+          {totalQuestions > 0 && questionIndex >= totalQuestions ? (
+             <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>Game Completed - All Questions Answered. Please finish the game.</p>
+          ) : activeQuestion ? (
             <div>
               <span style={{ fontSize: '0.9rem', color: 'var(--accent-color)', fontWeight: 'bold' }}>{activeQuestion.category}</span>
               <p style={{ fontSize: '1.25rem', marginTop: '0.5rem' }}>{activeQuestion.question}</p>
