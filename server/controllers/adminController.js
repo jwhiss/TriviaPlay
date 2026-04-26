@@ -8,11 +8,11 @@ const generateGameCode = () => {
 
 exports.createGame = async (req, res) => {
   try {
-    const { name, questionResponseTimeLimit, maxTeams } = req.body;
+    const { name, questionResponseTimeLimit, maxTeams, category } = req.body;
     
-    // In a real scenario, you'd allow them to filter questions by theme
-    // For now, let's grab random 10 questions to load into the session
-    const questions = await Question.aggregate([{ $sample: { size: 10 } }]);
+    // Allow them to filter questions by theme
+    const matchStage = category && category !== 'Any' ? { category } : {};
+    const questions = await Question.aggregate([{ $match: matchStage }, { $sample: { size: 10 } }]);
     const questionIds = questions.map(q => q._id);
 
     const gameCode = generateGameCode();
@@ -46,5 +46,15 @@ exports.getGames = async (req, res) => {
   } catch (error) {
     console.error('Get Games Error:', error);
     res.status(500).json({ message: 'Failed to fetch games.' });
+  }
+};
+
+exports.getCategories = async (req, res) => {
+  try {
+    const categories = await Question.distinct('category');
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error('Get Categories Error:', error);
+    res.status(500).json({ message: 'Failed to fetch categories.' });
   }
 };

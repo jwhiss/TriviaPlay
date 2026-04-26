@@ -1,17 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createGame } from '../api'
+import { createGame, getCategories } from '../api'
 
 export default function GameConfig() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [categories, setCategories] = useState([])
 
   const [formData, setFormData] = useState({
     name: 'Trivia Night Special',
     questionResponseTimeLimit: 30,
     maxTeams: 50,
+    category: 'Any',
   })
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const cats = await getCategories();
+        setCategories(cats);
+      } catch (err) {
+        console.error('Failed to fetch categories', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -80,10 +94,13 @@ export default function GameConfig() {
         </div>
 
         <div className="form-group">
-          <label>Questions Setup</label>
-          <div style={{ padding: '1rem', border: '1px dashed var(--glass-border)', borderRadius: '8px', color: 'var(--text-secondary)' }}>
-            Random pool selected for this iteration. (Custom playlists coming soon)
-          </div>
+          <label>Question Category</label>
+          <select name="category" value={formData.category} onChange={handleChange}>
+            <option value="Any">Any Category</option>
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
         </div>
 
         <button type="submit" className="btn" disabled={loading} style={{ marginTop: '1rem' }}>

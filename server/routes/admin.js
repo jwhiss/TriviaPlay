@@ -14,4 +14,8 @@ router.post('/games', adminController.createGame);
 // List all games
 router.get('/games', adminController.getGames);
 
+// GET /api/admin/categories
+// List all unique question categories
+router.get('/categories', adminController.getCategories);
+
 module.exports = router;
