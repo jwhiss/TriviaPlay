@@ -5,17 +5,24 @@ import './index.css';
 
 function App() {
   const [gameCode, setGameCode] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleConnect = (code) => {
+    setErrorMsg('');
     setGameCode(code);
+  };
+
+  const handleError = (message) => {
+    setErrorMsg(message);
+    setGameCode(null);
   };
 
   return (
     <>
       {!gameCode ? (
-        <Home onConnect={handleConnect} />
+        <Home onConnect={handleConnect} error={errorMsg} />
       ) : (
-        <DisplayBoard gameCode={gameCode} />
+        <DisplayBoard gameCode={gameCode} onError={handleError} />
       )}
     </>
   );

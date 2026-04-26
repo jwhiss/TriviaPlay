@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from './socket';
-import QRCode from 'react-qr-code';
+import { QRCodeSVG } from 'qrcode.react';
 import { Users, Trophy } from 'lucide-react';
 
-const DisplayBoard = ({ gameCode }) => {
+const DisplayBoard = ({ gameCode, onError }) => {
   const [status, setStatus] = useState('connecting'); // connecting, lobby, active, scoreboard, finished
   const [teams, setTeams] = useState([]);
   const [activeQuestion, setActiveQuestion] = useState(null);
@@ -20,6 +20,10 @@ const DisplayBoard = ({ gameCode }) => {
       setStatus(data.status || 'lobby');
       setTeams(data.teams || []);
       setActiveQuestion(data.activeQuestion || null);
+    });
+
+    socket.on('join_error', (data) => {
+      if (onError) onError(data.message || 'Failed to connect to Game Session.');
     });
 
     socket.on('scoreboard_broadcast', (data) => {
@@ -46,12 +50,13 @@ const DisplayBoard = ({ gameCode }) => {
 
     return () => {
       socket.off('display_sync');
+      socket.off('join_error');
       socket.off('scoreboard_broadcast');
       socket.off('score_update');
       socket.off('question_broadcast');
       socket.off('game_ended');
     };
-  }, [gameCode, activeQuestion]);
+  }, [gameCode]);
 
   if (status === 'connecting') {
     return (
@@ -80,7 +85,7 @@ const DisplayBoard = ({ gameCode }) => {
           
           <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{ background: 'white', padding: '30px', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
-              <QRCode value={joinUrl} size={400} />
+              <QRCodeSVG value={joinUrl} size={400} />
             </div>
           </div>
           

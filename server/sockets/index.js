@@ -23,9 +23,12 @@ module.exports = (io) => {
               choices: [session.questions[session.currentQuestionIndex].correctAnswer, ...session.questions[session.currentQuestionIndex].incorrectAnswers].sort(() => Math.random() - 0.5)
             } : null
           });
+        } else {
+          socket.emit('join_error', { message: 'Invalid Game Code. Please check and try again.' });
         }
       } catch (err) {
         console.error('Display sync error:', err);
+        socket.emit('join_error', { message: 'An error occurred while connecting.' });
       }
     });
 

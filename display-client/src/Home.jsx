@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Home = ({ onConnect }) => {
+const Home = ({ onConnect, error }) => {
   const [code, setCode] = useState('');
 
   const handleSubmit = (e) => {
@@ -17,6 +17,12 @@ const Home = ({ onConnect }) => {
         <p className="subtitle" style={{ fontSize: '1.2rem', marginBottom: '30px' }}>
           Enter the Game Code to connect this display screen.
         </p>
+        
+        {error && (
+          <div style={{ color: 'var(--danger)', marginBottom: '20px', padding: '10px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
+            {error}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '300px', margin: '0 auto' }}>
           <input

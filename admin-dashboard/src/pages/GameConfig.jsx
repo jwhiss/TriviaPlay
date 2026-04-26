@@ -31,7 +31,7 @@ export default function GameConfig() {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'name' ? value : Number(value)
+      [name]: (name === 'name' || name === 'category') ? value : Number(value)
     }))
   }
 
