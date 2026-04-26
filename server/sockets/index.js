@@ -4,6 +4,31 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
+    // Display joins a game
+    socket.on('display_join', async (data) => {
+      const { gameCode } = data;
+      socket.join(gameCode);
+      
+      try {
+        const session = await GameSession.findOne({ gameCode }).populate('questions');
+        if (session) {
+          socket.emit('display_sync', {
+            teams: session.teams,
+            status: session.status,
+            totalQuestions: session.questions.length,
+            currentQuestionIndex: session.currentQuestionIndex,
+            activeQuestion: (session.currentQuestionIndex > -1 && session.questions[session.currentQuestionIndex]) ? {
+              question: session.questions[session.currentQuestionIndex].question,
+              category: session.questions[session.currentQuestionIndex].category,
+              choices: [session.questions[session.currentQuestionIndex].correctAnswer, ...session.questions[session.currentQuestionIndex].incorrectAnswers].sort(() => Math.random() - 0.5)
+            } : null
+          });
+        }
+      } catch (err) {
+        console.error('Display sync error:', err);
+      }
+    });
+
     // Admin joins a game room
     socket.on('admin_join', async (data) => {
       const { gameCode } = data;

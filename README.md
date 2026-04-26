@@ -3,7 +3,7 @@
 Trivia Play is a comprehensive, offline-capable, local-area network (LAN) trivia system designed for bars and venues. It allows a host to run interactive trivia games using their laptop and existing TVs, while patrons participate directly from their personal mobile devices using real-time WebSockets without needing to download an app or create an account.
 
 ## Features Included
-* **Three-Tier Architecture**: A Node.js/Express backend server, a React/Vite Admin Dashboard, and a React/Vite Patron Client.
+* **Four-Tier Architecture**: A Node.js/Express backend server, a React/Vite Admin Dashboard, a React/Vite Patron Client, and a dedicated React/Vite Display Client for TV screens.
 * **Low-Latency Gameplay**: Instantaneous, bidirectional WebSocket connections for synchronized operations between the host and players.
 * **Premium Glassmorphism UI**: Beautiful, engaging interfaces across dashboards and patron screens built securely with custom CSS styling and responsive micro-animations.
 * **Host Control**: An authenticated admin dashboard granting the host full power to create game sessions, configure options, and trigger trivia questions manually.
@@ -51,3 +51,13 @@ npm install
 npm run dev -- --port 5000
 ```
 *The Patron Web Client will run on http://localhost:5000*
+
+### 4. Display Client (Terminal 4)
+
+Start the presenter display interface used for TV screens:
+```bash
+cd display-client
+npm install
+npm run dev
+```
+*The Display Client will run on http://localhost:5175*
