@@ -34,4 +34,14 @@ export const getCategories = async () => {
   return response.data;
 };
 
+export const getQuestions = async (filters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.category && filters.category !== 'Any') params.append('category', filters.category);
+  if (filters.difficulty && filters.difficulty !== 'Any') params.append('difficulty', filters.difficulty);
+  if (filters.type && filters.type !== 'Any') params.append('type', filters.type);
+  
+  const response = await api.get(`/admin/questions?${params.toString()}`);
+  return response.data;
+};
+
 export default api;

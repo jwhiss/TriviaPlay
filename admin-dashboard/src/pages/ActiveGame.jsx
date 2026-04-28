@@ -12,23 +12,27 @@ export default function ActiveGame() {
   const [activeQuestion, setActiveQuestion] = useState(null)
   const [isConfirmingStop, setIsConfirmingStop] = useState(false)
   
+  const [status, setStatus] = useState('lobby')
+  const [showIntermediateScoreboard, setShowIntermediateScoreboard] = useState(false)
+  const [currentAnswers, setCurrentAnswers] = useState([])
+  
   useEffect(() => {
     const socket = connectSocket()
 
-    // Emit admin join to get placed in the gameCode room and receive sync payload
     socket.emit('admin_join', { gameCode })
 
-    // Hydrate state from server upon initial join
     socket.on('admin_sync', (data) => {
       if (data) {
         if (data.teams) setTeams(data.teams)
         if (data.currentQuestionIndex !== undefined) setQuestionIndex(data.currentQuestionIndex)
         if (data.totalQuestions !== undefined) setTotalQuestions(data.totalQuestions)
         if (data.activeQuestion) setActiveQuestion(data.activeQuestion)
+        if (data.status) setStatus(data.status)
+        if (data.showIntermediateScoreboard !== undefined) setShowIntermediateScoreboard(data.showIntermediateScoreboard)
+        if (data.currentAnswers) setCurrentAnswers(data.currentAnswers)
       }
     })
 
-    // Listen for scoreboard updates
     socket.on('scoreboard_broadcast', (data) => {
       if (data && data.teams) setTeams(data.teams)
     })
@@ -37,25 +41,52 @@ export default function ActiveGame() {
       if (data && data.teams) setTeams(data.teams)
     })
 
-    // Listen for question push (to mirror what display sees)
     socket.on('question_broadcast', (data) => {
       setActiveQuestion(data)
+      setStatus('active')
+      setCurrentAnswers([])
+    })
+
+    socket.on('player_answered', (data) => {
+      setCurrentAnswers(prev => {
+        // Update or add the answer
+        const existingIdx = prev.findIndex(a => a.teamId === data.teamId);
+        if (existingIdx >= 0) {
+          const newArr = [...prev];
+          newArr[existingIdx] = { ...newArr[existingIdx], ...data };
+          return newArr;
+        }
+        return [...prev, data];
+      });
+    })
+    
+    socket.on('all_answered', () => {
+       // Could be used for specific animation if needed
+    })
+    
+    socket.on('intermediate_broadcast', () => {
+       setStatus('intermediate')
+       setCurrentAnswers([]) // They've been applied
     })
 
     return () => {
-      // Don't disconnect immediately if we want persistent sockets, 
-      // but usually clean up listeners here.
       socket.off('admin_sync')
       socket.off('scoreboard_broadcast')
       socket.off('score_update')
       socket.off('question_broadcast')
-      // disconnectSocket() // optionally disconnect on unmount
+      socket.off('player_answered')
+      socket.off('all_answered')
+      socket.off('intermediate_broadcast')
     }
   }, [gameCode])
 
-  const handleNextQuestion = () => {
+  const handleNextAction = () => {
     const socket = getSocket()
-    if (socket) {
+    if (!socket) return
+
+    if (showIntermediateScoreboard && status === 'active') {
+      socket.emit('show_intermediate_scoreboard', { gameCode })
+    } else {
       const nextIdx = questionIndex + 1
       socket.emit('trigger_question', { gameCode, questionIndex: nextIdx })
       setQuestionIndex(nextIdx)
@@ -70,6 +101,17 @@ export default function ActiveGame() {
     navigate('/')
   }
 
+  const allAnswered = teams.length > 0 && currentAnswers.length >= teams.length;
+  
+  let nextButtonText = 'NEXT QUESTION';
+  if (questionIndex === -1) nextButtonText = 'START GAME';
+  else if (showIntermediateScoreboard && status === 'active') nextButtonText = 'SHOW RESULTS';
+  
+  let nextButtonClass = 'btn';
+  if (status === 'active' && allAnswered) {
+    nextButtonClass = 'btn btn-success'; // turns green
+  }
+
   return (
     <div style={{ width: '100%', maxWidth: '900px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -80,14 +122,14 @@ export default function ActiveGame() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          {totalQuestions > 0 && questionIndex >= totalQuestions - 1 ? (
+          {totalQuestions > 0 && questionIndex >= totalQuestions - 1 && (!showIntermediateScoreboard || status === 'intermediate') ? (
             <button onClick={handleEndGame} className="btn" style={{ width: 'auto', background: 'var(--accent-color)', color: 'white' }}>
               FINISH GAME
             </button>
           ) : (
             <>
-              <button onClick={handleNextQuestion} className="btn" style={{ width: 'auto' }}>
-                {questionIndex === -1 ? 'START GAME' : 'NEXT QUESTION'}
+              <button onClick={handleNextAction} className={nextButtonClass} style={{ width: 'auto' }}>
+                {nextButtonText}
               </button>
               {isConfirmingStop ? (
                 <button onClick={handleEndGame} className="btn btn-danger" style={{ width: 'auto', animation: 'fadeIn 0.2s ease-in' }}>
@@ -128,20 +170,37 @@ export default function ActiveGame() {
 
         {/* Participants Panel */}
         <div className="glass-card" style={{ maxWidth: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 style={{ margin: 0 }}>Participants ({teams.length})</h3>
+            {status === 'active' && (
+               <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                 Answers: {currentAnswers.length} / {teams.length}
+               </span>
+            )}
           </div>
           
           {teams.length === 0 ? (
             <p style={{ color: 'var(--text-secondary)', marginTop: '2rem', textAlign: 'center' }}>No teams have joined yet. Tell them to enter code {gameCode}!</p>
           ) : (
-            <ul className="team-list">
-              {teams.sort((a,b) => b.score - a.score).map((team) => (
-                <li key={team.teamId} className="team-card">
-                  <span style={{ fontWeight: 'bold' }}>{team.name}</span>
-                  <span className="team-score">{team.score} PTS</span>
-                </li>
-              ))}
+            <ul className="team-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+              {teams.sort((a,b) => b.score - a.score).map((team) => {
+                const answerRecord = currentAnswers.find(a => a.teamId === team.teamId);
+                let bgColor = 'var(--glass-bg)';
+                
+                if (status === 'active' && answerRecord) {
+                  // Turn green if correct, red if incorrect
+                  bgColor = answerRecord.isCorrect ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)';
+                }
+
+                return (
+                  <li key={team.teamId} className="team-card" style={{ background: bgColor, border: '1px solid var(--glass-border)', transition: 'all 0.3s ease' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <span style={{ fontWeight: 'bold' }}>{team.name}</span>
+                      <span className="team-score" style={{ color: 'var(--accent-color)' }}>{team.score} PTS</span>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

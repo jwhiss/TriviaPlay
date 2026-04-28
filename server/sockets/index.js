@@ -42,6 +42,9 @@ module.exports = (io) => {
         if (session) {
           socket.emit('admin_sync', {
             teams: session.teams,
+            status: session.status,
+            showIntermediateScoreboard: session.showIntermediateScoreboard,
+            currentAnswers: session.currentAnswers,
             currentQuestionIndex: session.currentQuestionIndex,
             totalQuestions: session.questions.length,
             activeQuestion: (session.currentQuestionIndex > -1 && session.questions[session.currentQuestionIndex]) ? {
@@ -112,10 +115,30 @@ module.exports = (io) => {
         const session = await GameSession.findOne({ gameCode }).populate('questions');
         if (!session || !session.questions[questionIndex]) return;
 
+        // Apply any pending points if they weren't applied yet
+        let pointsApplied = false;
+        if (session.currentAnswers && session.currentAnswers.length > 0) {
+          session.currentAnswers.forEach(ans => {
+            if (ans.pointsAwarded > 0) {
+              const team = session.teams.find(t => t.teamId === ans.teamId);
+              if (team) {
+                team.score += ans.pointsAwarded;
+                pointsApplied = true;
+              }
+            }
+          });
+        }
+        
+        // Reset current answers for the new question
+        session.currentAnswers = [];
         session.currentQuestionIndex = questionIndex;
         session.status = 'active';
         session.questionStartTime = new Date();
         await session.save();
+
+        if (pointsApplied) {
+           io.to(gameCode).emit('score_update', { teams: session.teams });
+        }
 
         const questionInfo = session.questions[questionIndex];
         const payload = {
@@ -141,32 +164,82 @@ module.exports = (io) => {
         const session = await GameSession.findOne({ gameCode }).populate('questions');
         if (!session) return;
         
+        let isCorrect = false;
+        let pointsAwarded = 0;
+        let timeTakenMs = 0;
+
         const currentQ = session.questions[session.currentQuestionIndex];
         if (currentQ && currentQ.correctAnswer === answer) {
-          // Find team and increment score
-          const team = session.teams.find(t => t.teamId === teamId);
-          if (team) {
-            let pointsAwarded = 10;
-            if (session.questionStartTime) {
-              const timeLimitMillis = (session.questionResponseTimeLimit || 30) * 1000;
-              const timeTakenMs = Date.now() - session.questionStartTime.getTime();
-              
-              if (timeTakenMs < timeLimitMillis) {
-                // Award up to 10 bonus points based on how fast they answered
-                const speedBonus = 10 * (1 - (timeTakenMs / timeLimitMillis));
-                pointsAwarded += Math.max(0, Math.round(speedBonus));
-              }
-            }
-            team.score += pointsAwarded;
-            await session.save();
+          isCorrect = true;
+          pointsAwarded = 10;
+          if (session.questionStartTime) {
+            const timeLimitMillis = (session.questionResponseTimeLimit || 30) * 1000;
+            timeTakenMs = Date.now() - session.questionStartTime.getTime();
             
-            // Score update back to admin (Requirement 4302) and display client (Requirement 3005)
-            io.to(gameCode).emit('score_update', { teams: session.teams });
-            io.to(gameCode).emit('scoreboard_broadcast', { teams: session.teams });
+            if (timeTakenMs < timeLimitMillis) {
+              const speedBonus = 10 * (1 - (timeTakenMs / timeLimitMillis));
+              pointsAwarded += Math.max(0, Math.round(speedBonus));
+            }
           }
+        }
+
+        // Add to current answers buffer
+        session.currentAnswers.push({
+          teamId,
+          answer,
+          isCorrect,
+          timeTakenMs,
+          pointsAwarded
+        });
+        await session.save();
+
+        // Broadcast player_answered to clients
+        io.to(gameCode).emit('player_answered', { teamId, isCorrect });
+
+        // Check if all players have answered
+        if (session.currentAnswers.length >= session.teams.length) {
+          io.to(gameCode).emit('all_answered');
         }
       } catch (err) {
         console.error('Error handling answer:', err);
+      }
+    });
+
+    // Admin shows intermediate scoreboard
+    socket.on('show_intermediate_scoreboard', async (data) => {
+      const { gameCode } = data;
+      try {
+        const session = await GameSession.findOne({ gameCode });
+        if (!session) return;
+
+        // Apply pending points
+        if (session.currentAnswers && session.currentAnswers.length > 0) {
+          session.currentAnswers.forEach(ans => {
+            if (ans.pointsAwarded > 0) {
+              const team = session.teams.find(t => t.teamId === ans.teamId);
+              if (team) {
+                team.score += ans.pointsAwarded;
+              }
+            }
+          });
+        }
+        
+        session.status = 'intermediate';
+        await session.save();
+
+        io.to(gameCode).emit('score_update', { teams: session.teams });
+        io.to(gameCode).emit('scoreboard_broadcast', { teams: session.teams });
+        
+        io.to(gameCode).emit('intermediate_broadcast', { 
+          teams: session.teams, 
+          answers: session.currentAnswers 
+        });
+
+        // Clear currentAnswers now that they've been applied and broadcasted
+        session.currentAnswers = [];
+        await session.save();
+      } catch (err) {
+        console.error('Error showing intermediate scoreboard:', err);
       }
     });
 

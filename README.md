@@ -6,9 +6,13 @@ Trivia Play is a comprehensive, offline-capable, local-area network (LAN) trivia
 * **Four-Tier Architecture**: A Node.js/Express backend server, a React/Vite Admin Dashboard, a React/Vite Patron Client, and a dedicated React/Vite Display Client for TV screens.
 * **Low-Latency Gameplay**: Instantaneous, bidirectional WebSocket connections for synchronized operations between the host and players.
 * **Premium Glassmorphism UI**: Beautiful, engaging interfaces across dashboards and patron screens built securely with custom CSS styling and responsive micro-animations.
-* **Host Control**: An authenticated admin dashboard granting the host full power to create game sessions, configure options, and trigger trivia questions manually.
-* **Frictionless Patron Entry**: Patrons join active games seamlessly by simply navigating to the web portal and entering the active 6-character game code and a team name.
 * **Secure and Offline Capable**: Runs completely locally. Once question data is seeded into the MongoDB instance, the system fully isolates traffic on the local network preventing internet-related latency or cheating concerns, using robust JSON Web Token authorization for the admin side.
+* **Advanced Game Setup**: Hosts can  create custom games by individually selecting questions, or randomly draw questions based on advanced category, difficulty, and type filters.
+* **Anti-Cheating Score Buffering**: To prevent players from sharing answers, the display board waits until the host advances the round before revealing the scores.
+* **Live Answer Tracking**: The Admin Dashboard immediately indicates who has answered and highlights their team card green or red depending on correctness, giving the host real-time insight into the current question.
+* **Intermediate Scoreboard**: An optional interstitial screen displays round-by-round points awarded to teams before the next question begins.
+* **Post-Game Leaderboard**: The final leaderboard  gracefully displays up to 18 teams in a premium full-screen layout.
+* **Frictionless QR Code Joining**: The display client shows a QR code that when scanned, automatically pre-fills the game code on the Patron Client, streamlining entry.
 
 ---
 

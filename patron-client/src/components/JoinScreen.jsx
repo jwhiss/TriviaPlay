@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function JoinScreen({ onJoin, error }) {
-  const [gameCode, setGameCode] = useState('');
+export default function JoinScreen({ onJoin, error, initialGameCode = '' }) {
+  const [gameCode, setGameCode] = useState(initialGameCode);
   const [name, setName] = useState('');
+
+  useEffect(() => {
+    if (initialGameCode) {
+      setGameCode(initialGameCode);
+    }
+  }, [initialGameCode]);
 
   const handleJoin = (e) => {
     e.preventDefault();

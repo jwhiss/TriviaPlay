@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from './socket';
 import { QRCodeSVG } from 'qrcode.react';
-import { Users, Trophy } from 'lucide-react';
+import { Users, Trophy, CheckCircle, XCircle } from 'lucide-react';
 
 const DisplayBoard = ({ gameCode, onError }) => {
-  const [status, setStatus] = useState('connecting'); // connecting, lobby, active, scoreboard, finished
+  const [status, setStatus] = useState('connecting'); // connecting, lobby, active, intermediate, finished
   const [teams, setTeams] = useState([]);
   const [activeQuestion, setActiveQuestion] = useState(null);
   const [message, setMessage] = useState('');
+  
+  const [answeredTeams, setAnsweredTeams] = useState(new Set());
+  const [roundResults, setRoundResults] = useState([]); // from intermediate_broadcast
 
   const patronUrl = import.meta.env.VITE_PATRON_URL || 'http://localhost:5173';
   const joinUrl = `${patronUrl}/?game=${gameCode}`;
@@ -20,6 +23,9 @@ const DisplayBoard = ({ gameCode, onError }) => {
       setStatus(data.status || 'lobby');
       setTeams(data.teams || []);
       setActiveQuestion(data.activeQuestion || null);
+      if (data.currentAnswers) {
+        setAnsweredTeams(new Set(data.currentAnswers.map(a => a.teamId)));
+      }
     });
 
     socket.on('join_error', (data) => {
@@ -28,9 +34,6 @@ const DisplayBoard = ({ gameCode, onError }) => {
 
     socket.on('scoreboard_broadcast', (data) => {
       setTeams(data.teams || []);
-      if (!activeQuestion) {
-        // If there's no active question but we got a scoreboard broadcast, update list
-      }
     });
 
     socket.on('score_update', (data) => {
@@ -40,6 +43,18 @@ const DisplayBoard = ({ gameCode, onError }) => {
     socket.on('question_broadcast', (data) => {
       setActiveQuestion(data);
       setStatus('active');
+      setAnsweredTeams(new Set());
+      setRoundResults([]);
+    });
+
+    socket.on('player_answered', (data) => {
+      setAnsweredTeams(prev => new Set(prev).add(data.teamId));
+    });
+
+    socket.on('intermediate_broadcast', (data) => {
+      setStatus('intermediate');
+      setTeams(data.teams || []);
+      setRoundResults(data.answers || []);
     });
 
     socket.on('game_ended', (data) => {
@@ -54,6 +69,8 @@ const DisplayBoard = ({ gameCode, onError }) => {
       socket.off('scoreboard_broadcast');
       socket.off('score_update');
       socket.off('question_broadcast');
+      socket.off('player_answered');
+      socket.off('intermediate_broadcast');
       socket.off('game_ended');
     };
   }, [gameCode]);
@@ -108,7 +125,50 @@ const DisplayBoard = ({ gameCode, onError }) => {
     );
   }
 
-  // Active Question or finished
+  // Full screen post-game leaderboard
+  if (status === 'finished') {
+    return (
+      <div className="display-container" style={{ padding: '40px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="glass-panel animate-fade-in" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+           <Trophy size={80} color="#FBBF24" style={{ marginBottom: '20px', marginTop: '20px' }} />
+           <h1 className="title" style={{ fontSize: '4rem', marginBottom: '10px' }}>Final Leaderboard</h1>
+           <p style={{ fontSize: '1.5rem', color: 'var(--text-muted)', marginBottom: '40px' }}>{message}</p>
+           
+           <div style={{ 
+             display: 'grid', 
+             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+             gap: '20px', 
+             width: '100%', 
+             maxWidth: '1200px',
+             maxHeight: '60vh',
+             overflowY: 'auto',
+             padding: '20px'
+           }}>
+             {[...teams].sort((a,b) => b.score - a.score).slice(0, 18).map((team, idx) => (
+                <div key={idx} style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '20px', 
+                  background: idx === 0 ? 'rgba(251, 191, 36, 0.2)' : idx === 1 ? 'rgba(156, 163, 175, 0.2)' : idx === 2 ? 'rgba(180, 83, 9, 0.2)' : 'rgba(255,255,255,0.05)',
+                  borderRadius: '16px',
+                  border: idx === 0 ? '2px solid #FBBF24' : idx === 1 ? '2px solid #9CA3AF' : idx === 2 ? '2px solid #B45309' : '1px solid var(--glass-border)',
+                }}>
+                  <span style={{ fontSize: '2rem', fontWeight: 'bold', color: idx === 0 ? '#FBBF24' : idx === 1 ? '#9CA3AF' : idx === 2 ? '#B45309' : 'var(--text-muted)', marginBottom: '10px' }}>
+                    #{idx + 1}
+                  </span>
+                  <span style={{ fontSize: '1.8rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '5px' }}>{team.name}</span>
+                  <span style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--accent-blue)' }}>{team.score} <span style={{fontSize: '1rem'}}>PTS</span></span>
+                </div>
+             ))}
+           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Active Question or Intermediate
   return (
     <div className="display-container" style={{ padding: '40px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Bar with Game Code */}
@@ -142,11 +202,51 @@ const DisplayBoard = ({ gameCode, onError }) => {
                 ))}
               </div>
             </div>
-          ) : status === 'finished' ? (
-            <div className="glass-panel animate-fade-in" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-               <Trophy size={100} color="#FBBF24" style={{ marginBottom: '30px' }} />
-               <h1 className="title" style={{ fontSize: '5rem', marginBottom: '20px' }}>Game Over</h1>
-               <p style={{ fontSize: '2rem', color: 'var(--text-muted)' }}>{message}</p>
+          ) : status === 'intermediate' ? (
+            <div className="glass-panel animate-fade-in" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+              <h2 className="title" style={{ fontSize: '3.5rem', textAlign: 'center', marginBottom: '30px' }}>Round Results</h2>
+              
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                gap: '15px', 
+                overflowY: 'auto',
+                padding: '10px'
+              }}>
+                {teams.map((team) => {
+                  const result = roundResults.find(r => r.teamId === team.teamId);
+                  let bgColor = 'rgba(255,255,255,0.05)';
+                  let icon = null;
+                  let pointsStr = '';
+                  
+                  if (result) {
+                    bgColor = result.isCorrect ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+                    icon = result.isCorrect ? <CheckCircle color="#10B981" /> : <XCircle color="#EF4444" />;
+                    pointsStr = result.pointsAwarded > 0 ? `+${result.pointsAwarded}` : '0';
+                  }
+
+                  return (
+                    <div key={team.teamId} style={{ 
+                      background: bgColor, 
+                      padding: '20px', 
+                      borderRadius: '12px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '10px',
+                      border: '1px solid var(--glass-border)'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center' }}>{team.name}</span>
+                        {icon}
+                      </div>
+                      <span style={{ fontSize: '2rem', fontWeight: '900', color: result?.isCorrect ? '#10B981' : 'var(--text-muted)' }}>
+                        {pointsStr}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ) : (
              <div className="glass-panel animate-fade-in" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -161,24 +261,29 @@ const DisplayBoard = ({ gameCode, onError }) => {
             <Trophy size={28} color="var(--accent-blue)" /> Leaderboard
           </h3>
           <div style={{ overflowY: 'auto', flexGrow: 1, paddingRight: '10px' }}>
-            {[...teams].sort((a,b) => b.score - a.score).map((team, idx) => (
-              <div key={idx} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                padding: '20px 25px', 
-                background: idx === 0 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255,255,255,0.05)',
-                borderRadius: '16px',
-                marginBottom: '15px',
-                border: idx === 0 ? '1px solid var(--accent-blue)' : '1px solid transparent',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: idx === 0 ? '#FBBF24' : 'var(--text-muted)' }}>#{idx + 1}</span>
-                  <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{team.name}</span>
+            {[...teams].sort((a,b) => b.score - a.score).map((team, idx) => {
+              const hasAnswered = status === 'active' && answeredTeams.has(team.teamId);
+              
+              return (
+                <div key={idx} style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  padding: '20px 25px', 
+                  background: hasAnswered ? 'rgba(59, 130, 246, 0.4)' : idx === 0 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255,255,255,0.05)',
+                  borderRadius: '16px',
+                  marginBottom: '15px',
+                  border: hasAnswered ? '1px solid #3B82F6' : idx === 0 ? '1px solid var(--accent-blue)' : '1px solid transparent',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: idx === 0 ? '#FBBF24' : 'var(--text-muted)' }}>#{idx + 1}</span>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{team.name}</span>
+                  </div>
+                  <span style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--accent-blue)' }}>{team.score}</span>
                 </div>
-                <span style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--accent-blue)' }}>{team.score}</span>
-              </div>
-            ))}
+              );
+            })}
             {teams.length === 0 && (
               <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '20px' }}>No teams joined yet.</p>
             )}

@@ -24,9 +24,24 @@ const gameSessionSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['setup', 'lobby', 'active', 'finished', 'cancelled'],
+    enum: ['setup', 'lobby', 'active', 'intermediate', 'finished', 'cancelled'],
     default: 'setup'
   },
+  showIntermediateScoreboard: {
+    type: Boolean,
+    default: false
+  },
+  isCustomGame: {
+    type: Boolean,
+    default: false
+  },
+  currentAnswers: [{
+    teamId: String,
+    answer: String,
+    isCorrect: Boolean,
+    timeTakenMs: Number,
+    pointsAwarded: Number
+  }],
   questions: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Question'

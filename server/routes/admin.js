@@ -18,4 +18,8 @@ router.get('/games', adminController.getGames);
 // List all unique question categories
 router.get('/categories', adminController.getCategories);
 
+// GET /api/admin/questions
+// List questions with optional filters
+router.get('/questions', adminController.getQuestions);
+
 module.exports = router;

@@ -12,8 +12,15 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [finalTeams, setFinalTeams] = useState([])
+  const [initialGameCode, setInitialGameCode] = useState('')
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('game')
+    if (code) {
+      setInitialGameCode(code.toUpperCase())
+    }
+
     socket.connect()
 
     socket.on('join_confirmation', (data) => {
@@ -74,7 +81,7 @@ function App() {
 
   return (
     <div className="container">
-      {gameState === 'JOIN' && <JoinScreen onJoin={handleJoin} error={errorMsg} />}
+      {gameState === 'JOIN' && <JoinScreen onJoin={handleJoin} error={errorMsg} initialGameCode={initialGameCode} />}
       {gameState === 'WAITING' && <WaitingScreen message="Waiting for host to start..." />}
       {gameState === 'PLAYING' && <QuestionScreen question={currentQuestion} onAnswer={handleAnswer} />}
       {gameState === 'SUBMITTED_PENDING' && <WaitingScreen message="Submitting answer..." />}
