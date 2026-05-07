@@ -14,7 +14,7 @@ function getLocalIP() {
   return 'localhost';
 }
 
-process.env.VITE_PATRON_URL = `http://${getLocalIP()}:5173`;
+process.env.VITE_PATRON_URL = `http://${getLocalIP()}`;
 
 // https://vite.dev/config/
 export default defineConfig({
