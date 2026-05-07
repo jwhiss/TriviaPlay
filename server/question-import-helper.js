@@ -33,578 +33,582 @@ const otdResponse = {
     "results": [
         {
             "type": "multiple",
-            "difficulty": "easy",
-            "category": "Science: Mathematics",
-            "question": "What&#039;s the square root of 49?",
-            "correct_answer": "7",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "Earl Grey tea is black tea flavoured with what?",
+            "correct_answer": "Bergamot oil",
             "incorrect_answers": [
-                "4",
-                "12",
-                "9"
+                "Lavender",
+                "Vanilla",
+                "Honey"
             ]
         },
         {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "Geography",
-            "question": "Which of the following languages does NOT use the Latin alphabet?",
-            "correct_answer": "Georgian",
-            "incorrect_answers": [
-                "Turkish",
-                "Swahili",
-                "Vietnamese"
-            ]
-        },
-        {
-            "type": "multiple",
+            "type": "boolean",
             "difficulty": "hard",
-            "category": "Entertainment: Cartoon &amp; Animations",
-            "question": "What was the release date of the first episode of &quot;The Powerpuff Girls&quot;?",
-            "correct_answer": "November 18, 1998",
+            "category": "General Knowledge",
+            "question": "&quot;Number 16 Bus Shelter&quot; was a child&#039;s name that was approved by the New Zealand government.",
+            "correct_answer": "True",
             "incorrect_answers": [
-                "June 25, 1999",
-                "July 28, 2000",
-                "April 14, 2001"
+                "False"
             ]
         },
         {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Film",
-            "question": "In the 2002 film &quot;Kung Pow! Enter the Fist&quot;, why was Wimp Lo purposely trained wrong?",
-            "correct_answer": "As a joke",
+            "type": "boolean",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Dihydrogen Monoxide was banned due to health risks after being discovered in 1983 inside swimming pools and drinking water.",
+            "correct_answer": "False",
             "incorrect_answers": [
-                "For cheating",
-                "Revenge",
-                "To test him"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Entertainment: Video Games",
-            "question": "The Internet Meme &quot;All your base are belong to us&quot; is based on the poorly translated English Version of which Video Game?",
-            "correct_answer": "Zero Wing",
-            "incorrect_answers": [
-                "F-Zero",
-                "Wing Commander",
-                "Star Wars: X-Wing"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Comics",
-            "question": "What is Hellboy&#039;s true name?",
-            "correct_answer": "Anung Un Rama",
-            "incorrect_answers": [
-                "Right Hand of Doom",
-                "Ogdru Jahad",
-                "Azzael"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Science: Computers",
-            "question": "Lenovo acquired IBM&#039;s personal computer division, including the ThinkPad line of laptops and tablets, in what year?",
-            "correct_answer": "2005",
-            "incorrect_answers": [
-                "1999",
-                "2002",
-                "2008"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Television",
-            "question": "The first half-hour CGI cartoon, ReBoot, aired on which year?",
-            "correct_answer": "1994",
-            "incorrect_answers": [
-                "1993",
-                "1998",
-                "1999"
+                "True"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "easy",
-            "category": "Entertainment: Video Games",
-            "question": "What was Frank West&#039;s job in &quot;Dead Rising&quot;?",
-            "correct_answer": "Photojournalist",
+            "category": "General Knowledge",
+            "question": "Which canal connects the Mediterranean Sea with the Red Sea?",
+            "correct_answer": "Suez Canal",
             "incorrect_answers": [
-                "Janitor",
-                "Chef",
-                "Taxi Driver"
+                "Panama Canal",
+                "Sinai Canal",
+                "Qaraqum Canal"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "easy",
-            "category": "Vehicles",
-            "question": "What are the cylinder-like parts that pump up and down within the engine?",
-            "correct_answer": "Pistons",
+            "category": "General Knowledge",
+            "question": "How many cards are there in a standard deck of playing cards?",
+            "correct_answer": "52",
             "incorrect_answers": [
-                "Leaf Springs",
-                "Radiators",
-                "ABS"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Film",
-            "question": "About how much money did it cost for Tommy Wiseau to make his masterpiece &quot;The Room&quot; (2003)?",
-            "correct_answer": "$6 Million",
-            "incorrect_answers": [
-                "$20,000",
-                "$1 Million",
-                "$10 Million"
+                "32",
+                "40",
+                "64"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "easy",
-            "category": "Science &amp; Nature",
-            "question": "Alzheimer&#039;s disease primarily affects which part of the human body?",
-            "correct_answer": "Brain",
+            "category": "General Knowledge",
+            "question": "Trypophobia is the fear of ",
+            "correct_answer": "groups of holes",
             "incorrect_answers": [
-                "Lungs",
-                "Skin",
-                "Heart"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "Entertainment: Video Games",
-            "question": "In which mall does &quot;Dead Rising&quot; take place?",
-            "correct_answer": "Willamette Parkview Mall",
-            "incorrect_answers": [
-                "Liberty Mall",
-                "Twin Pines Mall",
-                "Central Square Shopping Center"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Film",
-            "question": "In the Mad Max franchise, what type of car is the Pursuit Special driven by Max?",
-            "correct_answer": "Ford Falcon",
-            "incorrect_answers": [
-                "Holden Monaro",
-                "Chrysler Valiant Charger",
-                "Pontiac Firebird"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "Entertainment: Books",
-            "question": "Which of the following is the world&#039;s best-selling book?",
-            "correct_answer": "The Lord of the Rings",
-            "incorrect_answers": [
-                "The Little Prince",
-                "Harry Potter and the Philosopher&#039;s Stone",
-                "The Da Vinci Code"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Video Games",
-            "question": "Which of these features was added in the 1994 game &quot;Heretic&quot; that the original &quot;DOOM&quot; could not add due to limitations?",
-            "correct_answer": "Looking up and down",
-            "incorrect_answers": [
-                "Increased room sizes",
-                "Unlimited weapons",
-                "Highly-detailed textures"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "Entertainment: Music",
-            "question": "Whose signature guitar technique is called the &quot;windmill&quot;?",
-            "correct_answer": "Pete Townshend",
-            "incorrect_answers": [
-                "Jimmy Page",
-                "Eddie Van Halen",
-                "Jimi Hendrix"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Board Games",
-            "question": "In what year was the card game Magic: the Gathering first introduced?",
-            "correct_answer": "1993",
-            "incorrect_answers": [
-                "1987",
-                "1998",
-                "2003"
+                "swimming in deep water",
+                "public speaking",
+                "eating too much"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "medium",
             "category": "General Knowledge",
-            "question": "What is the most-visited website out of these options?",
-            "correct_answer": "Google",
+            "question": "When did the website &quot;Facebook&quot; launch?",
+            "correct_answer": "2004",
             "incorrect_answers": [
-                "YouTube",
-                "Facebook",
-                "Wikipedia"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Animals",
-            "question": "What is the scientific name for the Bald Eagle?",
-            "correct_answer": "Haliaeetus Leucocephalus ",
-            "incorrect_answers": [
-                "Tyto Alba",
-                "Cyanocitta Cristata",
-                "Aquila Chrysaetos"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Film",
-            "question": "What was the name of the protagonist in the movie Commando (1985)?",
-            "correct_answer": "John Matrix",
-            "incorrect_answers": [
-                "Ben Richards",
-                "Douglas Quaid",
-                "Harry Tasker"
+                "2005",
+                "2003",
+                "2006"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "easy",
-            "category": "Entertainment: Film",
-            "question": "When does &quot;Rogue One: A Star Wars Story&quot; take place chronologically in the series?",
-            "correct_answer": "Between Episode 3 and 4",
+            "category": "General Knowledge",
+            "question": "In which year did Ghana gain independence?",
+            "correct_answer": "1957",
             "incorrect_answers": [
-                "After Episode 6",
-                "Before Episode 1",
-                "Between Episode 4 and 5"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Geography",
-            "question": "Which is the world&#039;s longest river?",
-            "correct_answer": "Nile",
-            "incorrect_answers": [
-                "Missouri",
-                "Amazon",
-                "Yangtze"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Geography",
-            "question": "What city  has the busiest airport in the world?",
-            "correct_answer": "Atlanta, Georgia USA",
-            "incorrect_answers": [
-                "London, England",
-                "Chicago,Illinois ISA",
-                "Tokyo,Japan"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "Science: Computers",
-            "question": "What kind of memory is used on memory cache?",
-            "correct_answer": "SRAM",
-            "incorrect_answers": [
-                "DRAM",
-                "ROM",
-                "Flash"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Music",
-            "question": "Which album by American rapper Kanye West contained songs such as &quot;Love Lockdown&quot;, &quot;Paranoid&quot; and &quot;Heartless&quot;?",
-            "correct_answer": "808s &amp; Heartbreak",
-            "incorrect_answers": [
-                "Late Registration",
-                "The Life of Pablo",
-                "Graduation"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Sports",
-            "question": "What team did England beat in the semi-final stage to win in the 1966 World Cup final?",
-            "correct_answer": "Portugal",
-            "incorrect_answers": [
-                "West Germany",
-                "Soviet Union",
-                "Brazil"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "Geography",
-            "question": "Which of the following European languages is classified as a &quot;language isolate?&quot;",
-            "correct_answer": "Basque",
-            "incorrect_answers": [
-                "Galician",
-                "Maltese",
-                "Hungarian"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Entertainment: Film",
-            "question": "Which sci-fi cult films plot concerns aliens attempting to prevent humans from creating a doomsday weapon?",
-            "correct_answer": "Plan 9 from Outer Space",
-            "incorrect_answers": [
-                "The Man from Planet X",
-                "It Came from Outer Space",
-                "The Day The Earth Stood Still"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Japanese Anime &amp; Manga",
-            "question": "In the &quot;Sailor Moon&quot; series, what is Sailor Jupiter&#039;s civilian name?",
-            "correct_answer": "Makoto Kino",
-            "incorrect_answers": [
-                "Minako Aino",
-                "Usagi Tsukino",
-                "Rei Hino"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "History",
-            "question": "Who discovered Penicillin?",
-            "correct_answer": "Alexander Flemming",
-            "incorrect_answers": [
-                "Marie Curie",
-                "Alfred Nobel",
-                "Louis Pasteur"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Entertainment: Video Games",
-            "question": "This weapon in Counter-Strike: Global Offensive does not exist in real life.",
-            "correct_answer": "M4A4",
-            "incorrect_answers": [
-                "AWP",
-                "M4A1",
-                "MP9"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "easy",
-            "category": "History",
-            "question": "What year did World War II end?",
-            "correct_answer": "1945",
-            "incorrect_answers": [
-                "1943",
                 "1947",
-                "1950"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Science: Computers",
-            "question": "Which RAID array type is associated with data mirroring?",
-            "correct_answer": "RAID 1",
-            "incorrect_answers": [
-                "RAID 0",
-                "RAID 10",
-                "RAID 5"
+                "1960",
+                "1958"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "easy",
-            "category": "Entertainment: Video Games",
-            "question": "What is Gabe Newell&#039;s favorite class in Team Fortress 2?",
-            "correct_answer": "Spy",
+            "category": "General Knowledge",
+            "question": "What do sailors call the front of a boat?",
+            "correct_answer": "Bow",
             "incorrect_answers": [
-                "Heavy",
-                "Medic",
-                "Pyro"
+                "Stern",
+                "Port",
+                "Starboard"
             ]
         },
         {
-            "type": "multiple",
+            "type": "boolean",
             "difficulty": "easy",
-            "category": "Entertainment: Music",
-            "question": "In 2006, which band released their debut album &quot;A Fever You Can&#039;t Sweat Out&quot;?",
-            "correct_answer": "Panic! At the Disco",
+            "category": "General Knowledge",
+            "question": "The color orange is named after the fruit.",
+            "correct_answer": "True",
             "incorrect_answers": [
-                "Twenty One Pilots",
-                "My Chemical Romance",
-                "Fall Out Boy"
+                "False"
             ]
         },
         {
-            "type": "multiple",
+            "type": "boolean",
             "difficulty": "medium",
-            "category": "Entertainment: Video Games",
-            "question": "What character is NOT apart of the Grand Theft Auto series?",
-            "correct_answer": "Michael Cardenas",
+            "category": "General Knowledge",
+            "question": "&quot;Typewriter&quot; is the longest word that can be typed using only the first row on a QWERTY keyboard.",
+            "correct_answer": "False",
             "incorrect_answers": [
-                "Packie McReary",
-                "Tommy Vercetti",
-                "Lester Crest"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "medium",
-            "category": "Science &amp; Nature",
-            "question": "Which of the following is the male pollen-producing reproductive part of a flower?",
-            "correct_answer": "Stamen",
-            "incorrect_answers": [
-                "Sepal",
-                "Pistil",
-                "Petal"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Entertainment: Music",
-            "question": "When did the rapper Eazy-E die?",
-            "correct_answer": "March 26, 1995",
-            "incorrect_answers": [
-                "July 11, 1992",
-                "February 14, 1993",
-                "October 21, 1994"
+                "True"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "easy",
-            "category": "Science: Mathematics",
-            "question": "What is the equation for the area of a sphere?",
-            "correct_answer": "(4/3)&pi;r^3",
+            "category": "General Knowledge",
+            "question": "In past times, what would a gentleman keep in his fob pocket?",
+            "correct_answer": "Watch",
             "incorrect_answers": [
-                "4&pi;r^2",
-                "(1/3)&pi;hr^2",
-                "&pi;r^4"
-            ]
-        },
-        {
-            "type": "multiple",
-            "difficulty": "hard",
-            "category": "Geography",
-            "question": "Which of these cities is NOT in England?",
-            "correct_answer": "Edinburgh",
-            "incorrect_answers": [
-                "Oxford",
-                "Manchester",
-                "Southampton"
+                "Money",
+                "Keys",
+                "Notebook"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "medium",
             "category": "General Knowledge",
-            "question": "The lesser-known continuation of the saying &quot;Curiosity killed the cat...&quot; is:",
-            "correct_answer": "&quot;...but satisfaction brought it back.&quot;",
+            "question": "The Mexican Beer &quot;Corona&quot; is what type of beer?",
+            "correct_answer": "Pale Lager",
             "incorrect_answers": [
-                "&quot;...and the silent mouse remained thereat.&quot;",
-                "&quot;...which taught it not to do that.&quot;",
-                "&quot;...but death by the truth is better than ignorance.&quot;"
+                "India Pale Ale",
+                "Pilfsner",
+                "Baltic Porter"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "medium",
-            "category": "Entertainment: Video Games",
-            "question": "In the Jackbox party game Monster Seeking Monster, which monster can steal two hearts from other monsters under certain conditions?",
-            "correct_answer": "Serial Killer",
+            "category": "General Knowledge",
+            "question": "The phrase &quot;accident waiting to happen&quot; is an example of what type of figure of speech?",
+            "correct_answer": "Idiom",
             "incorrect_answers": [
-                "Parasite",
-                "Stalker",
-                "Magic Mirror"
+                "Simile",
+                "Metaphor",
+                "Analogy"
+            ]
+        },
+        {
+            "type": "boolean",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "A scientific study on peanuts in bars found traces of over 100 unique specimens of urine.",
+            "correct_answer": "False",
+            "incorrect_answers": [
+                "True"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "medium",
-            "category": "Entertainment: Video Games",
-            "question": "What is the final game of the &quot;Zero Escape&quot; series called?",
-            "correct_answer": "Zero Escape Zero Time Dilemma ",
+            "category": "General Knowledge",
+            "question": "Where does water from Poland Spring water bottles come from?",
+            "correct_answer": "Maine, United States",
             "incorrect_answers": [
-                "Nine Hours, Nine Persons, Nine Doors ",
-                "Zero Escape Virtue&#039;s Last Reward",
-                "The Nonary Game: Sigma&#039;s Last Life"
+                "Hesse, Germany",
+                "Masovia, Poland",
+                "Bavaria, Poland"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Which country has the Union Jack in its flag?",
+            "correct_answer": "New Zealand",
+            "incorrect_answers": [
+                "South Africa",
+                "Canada",
+                "Hong Kong"
+            ]
+        },
+        {
+            "type": "boolean",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "The French word for &quot;glass&quot; is &quot;glace&quot;.",
+            "correct_answer": "False",
+            "incorrect_answers": [
+                "True"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "This field is sometimes known as &ldquo;The Dismal Science.&rdquo;",
+            "correct_answer": "Economics",
+            "incorrect_answers": [
+                "Philosophy",
+                "Politics",
+                "Physics"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Who is the author of Jurassic Park?",
+            "correct_answer": "Michael Crichton",
+            "incorrect_answers": [
+                "Peter Benchley",
+                "Chuck Paluhniuk",
+                "Irvine Welsh"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "Which iconic Disneyland attraction was closed in 2017 to be remodeled as a &quot;Guardians of the Galaxy&quot; themed ride?",
+            "correct_answer": "Twilight Zone Tower of Terror",
+            "incorrect_answers": [
+                "The Haunted Mansion",
+                "Pirates of the Caribbean",
+                "Peter Pan&#039;s Flight"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "What was the first ever London Underground line to be built?",
+            "correct_answer": "Metropolitan Line",
+            "incorrect_answers": [
+                "Circle Line",
+                "Bakerloo Line",
+                "Victoria Line"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "How would one say goodbye in Spanish?",
+            "correct_answer": "Adi&oacute;s",
+            "incorrect_answers": [
+                " Hola",
+                "Au Revoir",
+                "Salir"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "hard",
-            "category": "Entertainment: Cartoon &amp; Animations",
-            "question": "In the TV show &quot;Rick and Morty&quot;, Rick uses the catchphrase &quot;Wubba Lubba Dub Dub&quot;, which means what in Birdperson?",
-            "correct_answer": "I am in great pain, please help me.",
+            "category": "General Knowledge",
+            "question": "How many notes are there on a standard grand piano?",
+            "correct_answer": "88",
             "incorrect_answers": [
-                "I pray that my life ends soon.",
-                "Lets get this party started!",
-                "I am suffering, please help me."
+                "98",
+                "108",
+                "78"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "Which month is Black History Month in the US?",
+            "correct_answer": "February",
+            "incorrect_answers": [
+                "May",
+                "November",
+                "August"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "What is the Italian word for &quot;tomato&quot;?",
+            "correct_answer": "Pomodoro",
+            "incorrect_answers": [
+                "Aglio",
+                "Cipolla",
+                "Peperoncino"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "&quot;A3&quot;, &quot;B1&quot;, and &quot;Legal&quot; are typical names of sizes for what object?",
+            "correct_answer": "Paper",
+            "incorrect_answers": [
+                "Airplanes",
+                "Law books",
+                "Phone screens"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "What country does sushi &amp; karaoke come from?",
+            "correct_answer": "Japan",
+            "incorrect_answers": [
+                "China",
+                "South Korea",
+                "Vietnam"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Who was the 1st President of Mexico?",
+            "correct_answer": "Guadalupe Victoria",
+            "incorrect_answers": [
+                "Benito Ju&aacute;rez",
+                "Miguel Hidalgo Y Costilla",
+                "Vicente Guerrero"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "hard",
-            "category": "History",
-            "question": "After the 1516 Battle of Marj Dabiq, the Ottoman Empire took control of Jerusalem from which sultanate?",
-            "correct_answer": "Mamluk",
+            "category": "General Knowledge",
+            "question": "Which of these anatomical terms refers to the tail end of the creature?",
+            "correct_answer": "Caudal",
             "incorrect_answers": [
-                "Ayyubid",
-                "Ummayyad",
-                "Seljuq"
+                "Ventral",
+                "Proximal",
+                "Coronal"
             ]
         },
         {
             "type": "multiple",
             "difficulty": "hard",
-            "category": "Entertainment: Television",
-            "question": "In &quot;Star Trek&quot;, what sauce is commonly used by Klingons on bregit lung?",
-            "correct_answer": "Grapok sauce",
+            "category": "General Knowledge",
+            "question": "Which of these cities does NOT have a United States Minting location?",
+            "correct_answer": "St. Louis, MO",
             "incorrect_answers": [
-                "Gazorpazorp pudding",
-                "Sweet chili sauce",
-                "Grapork sauce"
+                "San Fransisco, CA",
+                "Philidelphia, PA",
+                "West Point, NY"
             ]
         },
         {
             "type": "multiple",
-            "difficulty": "hard",
-            "category": "Entertainment: Video Games",
-            "question": "Which artist composed the original soundtrack for &quot;Watch Dogs 2&quot;?",
-            "correct_answer": "Hudson Mohawke",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "Amsterdam Centraal station is twinned with what station?",
+            "correct_answer": "London Liverpool Street",
             "incorrect_answers": [
-                "Rustie",
-                "Machinedrum",
-                "Flying Lotus"
+                "Frankfurt (Main) Hauptbahnhof",
+                "Paris Gare du Nord",
+                "Brussels Midi"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "What does the &quot;G&quot; mean in &quot;G-Man&quot;?",
+            "correct_answer": "Government",
+            "incorrect_answers": [
+                "Going",
+                "Ghost",
+                "Geronimo"
+            ]
+        },
+        {
+            "type": "boolean",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Pluto is a planet.",
+            "correct_answer": "False",
+            "incorrect_answers": [
+                "True"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "What is the average life span of a garden ant?",
+            "correct_answer": "15 years",
+            "incorrect_answers": [
+                "24 hours",
+                "1 week",
+                "3 years"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Where is the train station &quot;Llanfair&shy;pwllgwyngyll&shy;gogery&shy;chwyrn&shy;drobwll&shy;llan&shy;tysilio&shy;gogo&shy;goch&quot;?",
+            "correct_answer": "Wales",
+            "incorrect_answers": [
+                "Moldova",
+                "Czech Republic",
+                "Denmark"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "Which of the following buildings is example of a structure primarily built in the Art Deco architectural style?",
+            "correct_answer": "Niagara Mohawk Building",
+            "incorrect_answers": [
+                "Taipei 101",
+                "One Detroit Center",
+                "Westendstrasse 1"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "The &ldquo;fairy&rdquo; type made it&rsquo;s debut in which generation of the Pokemon core series games?",
+            "correct_answer": "6th",
+            "incorrect_answers": [
+                "2nd",
+                "7th",
+                "4th"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "Which language is NOT Indo-European?",
+            "correct_answer": "Hungarian",
+            "incorrect_answers": [
+                "Russian",
+                "Greek",
+                "Latvian"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "What year was Walt Disney born?",
+            "correct_answer": "1901",
+            "incorrect_answers": [
+                "1902",
+                "1903",
+                "1900"
+            ]
+        },
+        {
+            "type": "boolean",
+            "difficulty": "hard",
+            "category": "General Knowledge",
+            "question": "This is the correct spelling of &quot;Supercalifragilisticexpialidocious&quot;.",
+            "correct_answer": "True",
+            "incorrect_answers": [
+                "False"
+            ]
+        },
+        {
+            "type": "boolean",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Nutella is produced by the German company Ferrero.",
+            "correct_answer": "False",
+            "incorrect_answers": [
+                "True"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Which American-owned brewery led the country in sales by volume in 2015?",
+            "correct_answer": "D. G. Yuengling and Son, Inc",
+            "incorrect_answers": [
+                "Anheuser Busch",
+                "Boston Beer Company",
+                "Miller Coors"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "If you are traveling at a speed of 80 mph, how long will it take you to drive 80 miles?",
+            "correct_answer": "60 minutes",
+            "incorrect_answers": [
+                "90 minutes",
+                "30 minutes",
+                "50 minutes"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Red Vines is a brand of what type of candy?",
+            "correct_answer": "Licorice",
+            "incorrect_answers": [
+                "Lollipop",
+                "Chocolate",
+                "Bubblegum"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "On a dartboard, what number is directly opposite No. 1?",
+            "correct_answer": "19",
+            "incorrect_answers": [
+                "20",
+                "12",
+                "15"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "Which of the following card games revolves around numbers and basic math?",
+            "correct_answer": "Uno",
+            "incorrect_answers": [
+                "Go Fish",
+                "Twister",
+                "Munchkin"
+            ]
+        },
+        {
+            "type": "boolean",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "A pasodoble is a type of Italian pasta sauce.",
+            "correct_answer": "False",
+            "incorrect_answers": [
+                "True"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "easy",
+            "category": "General Knowledge",
+            "question": "When was the Playstation 3 released?",
+            "correct_answer": "November 11, 2006",
+            "incorrect_answers": [
+                "January 8, 2007",
+                "December 25, 2007",
+                "July 16, 2006"
+            ]
+        },
+        {
+            "type": "multiple",
+            "difficulty": "medium",
+            "category": "General Knowledge",
+            "question": "What name represents the letter &quot;M&quot; in the NATO phonetic alphabet?",
+            "correct_answer": "Mike",
+            "incorrect_answers": [
+                "Matthew",
+                "Mark",
+                "Max"
             ]
         }
     ]

@@ -55,6 +55,9 @@ const DisplayBoard = ({ gameCode, onError }) => {
       setStatus('intermediate');
       setTeams(data.teams || []);
       setRoundResults(data.answers || []);
+      if (data.correctAnswer) {
+        setActiveQuestion(prev => prev ? { ...prev, correctAnswer: data.correctAnswer } : { correctAnswer: data.correctAnswer });
+      }
     });
 
     socket.on('game_ended', (data) => {
@@ -204,48 +207,87 @@ const DisplayBoard = ({ gameCode, onError }) => {
             </div>
           ) : status === 'intermediate' ? (
             <div className="glass-panel animate-fade-in" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-              <h2 className="title" style={{ fontSize: '3.5rem', textAlign: 'center', marginBottom: '30px' }}>Round Results</h2>
               
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-                gap: '15px', 
-                overflowY: 'auto',
-                padding: '10px'
-              }}>
-                {teams.map((team) => {
-                  const result = roundResults.find(r => r.teamId === team.teamId);
-                  let bgColor = 'rgba(255,255,255,0.05)';
-                  let icon = null;
-                  let pointsStr = '';
-                  
-                  if (result) {
-                    bgColor = result.isCorrect ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
-                    icon = result.isCorrect ? <CheckCircle color="#10B981" /> : <XCircle color="#EF4444" />;
-                    pointsStr = result.pointsAwarded > 0 ? `+${result.pointsAwarded}` : '0';
-                  }
+              {/* Question and Correct Answer (Upper Half) */}
+              <div style={{ flex: 'none', display: 'flex', flexDirection: 'column', borderBottom: '1px solid var(--glass-border)', paddingBottom: '30px', marginBottom: '30px' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>Question</span>
+                <h2 className="title" style={{ fontSize: '3rem', textAlign: 'left', lineHeight: '1.2', marginBottom: '20px' }}>
+                  {activeQuestion?.question}
+                </h2>
+                <div>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '2px', display: 'block', marginBottom: '10px' }}>Answers</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                    {activeQuestion?.choices?.map((choice, idx) => {
+                      const isCorrect = choice === activeQuestion.correctAnswer;
+                      return (
+                        <div key={idx} style={{ 
+                          background: isCorrect ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.05)', 
+                          border: isCorrect ? '2px solid #10B981' : '1px solid var(--glass-border)', 
+                          padding: '15px 20px', 
+                          borderRadius: '16px', 
+                          fontSize: '1.8rem', 
+                          fontWeight: isCorrect ? 'bold' : 'normal', 
+                          color: isCorrect ? 'white' : 'var(--text-muted)',
+                          textAlign: 'center'
+                        }}>
+                          {choice}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
 
-                  return (
-                    <div key={team.teamId} style={{ 
-                      background: bgColor, 
-                      padding: '20px', 
-                      borderRadius: '12px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '10px',
-                      border: '1px solid var(--glass-border)'
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center' }}>{team.name}</span>
-                        {icon}
+              {/* Round Results (Lower Half) */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                <h3 style={{ fontSize: '2rem', textAlign: 'center', marginBottom: '20px' }}>Round Results</h3>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                  gap: '15px', 
+                  overflowY: 'auto',
+                  padding: '10px'
+                }}>
+                  {[...teams]
+                    .sort((a, b) => {
+                      const resA = roundResults.find(r => r.teamId === a.teamId)?.pointsAwarded || 0;
+                      const resB = roundResults.find(r => r.teamId === b.teamId)?.pointsAwarded || 0;
+                      return resB - resA;
+                    })
+                    .map((team) => {
+                    const result = roundResults.find(r => r.teamId === team.teamId);
+                    let bgColor = 'rgba(255,255,255,0.05)';
+                    let icon = null;
+                    let pointsStr = '';
+                    
+                    if (result) {
+                      bgColor = result.isCorrect ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+                      icon = result.isCorrect ? <CheckCircle color="#10B981" /> : <XCircle color="#EF4444" />;
+                      pointsStr = result.pointsAwarded > 0 ? `+${result.pointsAwarded}` : '0';
+                    }
+
+                    return (
+                      <div key={team.teamId} style={{ 
+                        background: bgColor, 
+                        padding: '20px', 
+                        borderRadius: '12px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '10px',
+                        border: '1px solid var(--glass-border)'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center' }}>{team.name}</span>
+                          {icon}
+                        </div>
+                        <span style={{ fontSize: '2rem', fontWeight: '900', color: result?.isCorrect ? '#10B981' : 'var(--text-muted)' }}>
+                          {pointsStr}
+                        </span>
                       </div>
-                      <span style={{ fontSize: '2rem', fontWeight: '900', color: result?.isCorrect ? '#10B981' : 'var(--text-muted)' }}>
-                        {pointsStr}
-                      </span>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           ) : (

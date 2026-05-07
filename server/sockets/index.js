@@ -209,7 +209,7 @@ module.exports = (io) => {
     socket.on('show_intermediate_scoreboard', async (data) => {
       const { gameCode } = data;
       try {
-        const session = await GameSession.findOne({ gameCode });
+        const session = await GameSession.findOne({ gameCode }).populate('questions');
         if (!session) return;
 
         // Apply pending points
@@ -227,12 +227,16 @@ module.exports = (io) => {
         session.status = 'intermediate';
         await session.save();
 
+        const currentQ = session.questions[session.currentQuestionIndex];
+        const correctAnswer = currentQ ? currentQ.correctAnswer : '';
+
         io.to(gameCode).emit('score_update', { teams: session.teams });
         io.to(gameCode).emit('scoreboard_broadcast', { teams: session.teams });
         
         io.to(gameCode).emit('intermediate_broadcast', { 
           teams: session.teams, 
-          answers: session.currentAnswers 
+          answers: session.currentAnswers,
+          correctAnswer: correctAnswer 
         });
 
         // Clear currentAnswers now that they've been applied and broadcasted
