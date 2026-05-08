@@ -2,6 +2,8 @@
 
 Trivia Play is a comprehensive, offline-capable, local-area network (LAN) trivia system designed for bars and venues. It allows a host to run interactive trivia games using their laptop and existing TVs, while patrons participate directly from their personal mobile devices using real-time WebSockets without needing to download an app or create an account.
 
+The Trivia Play software was implemented from engineering documentation (requirements, design, and testing plans) developed by Joel Whissel, Yousuf Khan, and Darhell Akitani Bob.
+
 ## Features Included
 * **Four-Tier Architecture**: A Node.js/Express backend server, a React/Vite Admin Dashboard, a React/Vite Patron Client, and a dedicated React/Vite Display Client for TV screens.
 * **Low-Latency Gameplay**: Instantaneous, bidirectional WebSocket connections for synchronized operations between the host and players.
