@@ -46,7 +46,7 @@ cd admin-dashboard
 npm install
 npm run dev
 ```
-*The Admin Dashboard will run on http://localhost:5173* (or similar port)
+*The Admin Dashboard will run on http://localhost:5174*
 
 ### 3. Patron Web Client (Terminal 3)
 
@@ -56,7 +56,7 @@ cd patron-client
 npm install
 npm run dev -- --port 5000
 ```
-*The Patron Web Client will run on http://localhost:5000*
+*The Patron Web Client will run on http://0.0.0.0* (LAN-accessible port 80)
 
 ### 4. Display Client (Terminal 4)
 
@@ -66,4 +66,4 @@ cd display-client
 npm install
 npm run dev
 ```
-*The Display Client will run on http://localhost:5175*
+*The Display Client will run on http://0.0.0.0:5175* (LAN-accessible port 5175)
